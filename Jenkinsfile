@@ -10,21 +10,6 @@ pipeline {​​
 
     }​​
 
-    // Apaga os dados do Workspace usando o plugin Workspace Cleanup Plugin
-
-    stages {​​
-
-        stage ('CleanResources') {​​
-
-            agent any
-
-            steps
-
-            {​​
-                cleanWs()
-            }​​
-        }​​
-
     // Remove a imagem e container anterior
 
     /*   stage('Remove Previous Image and Container') {​​
