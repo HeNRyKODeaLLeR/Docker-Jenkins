@@ -8,25 +8,8 @@ pipeline {
 
     }
 
-    // Apaga os dados do Workspace usando o plugin Workspace Cleanup Plugin
     stages {
-        stage ('CleanResources') {
-            agent any
-            steps
-            {
-                cleanWs()
-            }
-        }
-
-    // Remove a imagem e container anterior
-    /*   stage('Remove Previous Image and Container') {
-            steps {
-                sh 'docker rm --force "$CONTAINER_NAME"'
-                sh 'docker rmi --force "$IMAGE_NAME"'
-
-            }
-        }*/
-
+    
     // Criar a imagem docker
         stage ('Build Docker Image') {
                 agent any
@@ -38,9 +21,8 @@ pipeline {
             stage ('Run Docker Container') {
                 agent any
                 steps {
-                    sh 'docker rm -f "${DOCKER_IMAGE_NAME}"'s
                     sh 'docker run -d -p ${DOCKER_PORT}:3000 --name "${DOCKER_CONTAINER_NAME}" "${DOCKER_IMAGE_NAME}"'
                 }
             }
-        }
     }
+}
