@@ -1,46 +1,46 @@
-pipeline {​​
+pipeline {
 
     agent any
 
-        parameters {​​ 
+        parameters {
 
-        string(name: 'DOCKER_IMAGE_NAME', defaultValue: 'nodejs', description: 'Docker Image')
+            string(name: 'DOCKER_IMAGE_NAME', defaultValue: 'nodejs', description: 'Docker Image')
 
-        string(name: 'DOCKER_CONTAINER_NAME', defaultValue: 'nodejs', description: 'Docker Container Name')
+            string(name: 'DOCKER_CONTAINER_NAME', defaultValue: 'nodejs', description: 'Docker Container Name')
 
-    }​​
+        }
 
     // Remove a imagem e container anterior
 
-    /*   stage('Remove Previous Image and Container') {​​
+    /*   stage('Remove Previous Image and Container') {
 
-            steps {​​
+            steps {
                 sh 'docker rm --force "$CONTAINER_NAME"'
                 sh 'docker rmi --force "$IMAGE_NAME"'
-            }​​
-        }​​*/
+            }
+        }*/
 
     // Criar a imagem docker
 
-        stage ('Build Docker Image') {​​
+        stage ('Build Docker Image') {
 
                 agent any
 
-                steps {​​
-                        sh 'docker build -t "${​​DOCKER_IMAGE_NAME}​​" .'
-                }​​
-            }​​
+                steps {
+                        sh 'docker build -t "${DOCKER_IMAGE_NAME}" .'
+                }
+        }
 
     // Inicia o container
 
-            stage ('Run Docker Container') {​​
+        stage ('Run Docker Container') {
 
-                agent any
+            agent any
 
-                steps {​​
-                    sh 'docker rm -f "${​​DOCKER_IMAGE_NAME}​​"'
-                    sh 'docker run -d -p 3000:3000 --name "${​​DOCKER_CONTAINER_NAME}​​" "${​​DOCKER_IMAGE_NAME}​​"'
-                }​​
-            }​​
-        }​​
-    }​​
+                steps {
+                    sh 'docker rm -f "${DOCKER_IMAGE_NAME}"'
+                    sh 'docker run -d -p 3000:3000 --name "${DOCKER_CONTAINER_NAME}" "${DOCKER_IMAGE_NAME}"'
+                }
+            }
+        }
+    }
