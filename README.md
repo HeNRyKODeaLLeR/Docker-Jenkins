@@ -1,2 +1,2 @@
 # Docker-Jenkins
-Exrecício Cloud7
+Exercício Cloud7
