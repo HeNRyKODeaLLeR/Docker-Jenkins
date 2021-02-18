@@ -1,21 +1,89 @@
 pipeline {
+
     agent any
 
-    parameters {
-        string(name: 'FILE1', defaultValue: 'initialfile.txtx', description: 'Artifact new name')
+
+
+        parameters {
+
+        string(name: 'DOCKER_IMAGE_NAME', defaultValue: 'nodejs', description: 'Docker Image')
+
+        string(name: 'DOCKER_CONTAINER_NAME', defaultValue: 'nodejs', description: 'Docker Container Name')
+
+
+
     }
-    
+
+
+
+    // Apaga os dados do Workspace usando o plugin Workspace Cleanup Plugin
+
     stages {
-        stage('Create Write File 1') {
-            steps {
-                writeFile file: "${params.FILE1}", text: 'Hello World'
+
+        stage ('CleanResources') {
+
+            agent any
+
+            steps
+
+            {
+
+                cleanWs()
+
             }
+
         }
-    
-        stage('Archive Artifact Write File 1') {
+
+
+
+    // Remove a imagem e container anterior
+
+    /*   stage('Remove Previous Image and Container') {
+
             steps {
-                archiveArtifacts artifacts: "${params.FILE1}", followSymlinks: false
+
+                sh 'docker rm --force "$CONTAINER_NAME"'
+
+                sh 'docker rmi --force "$IMAGE_NAME"'
+
+
+
             }
+
+        }*/
+
+
+
+    // Criar a imagem docker
+
+        stage ('Build Docker Image') {
+
+                agent any
+
+                steps {
+
+                        sh 'docker build -t "${DOCKER_IMAGE_NAME}" .'
+
+                }
+
+            }
+
+    // Inicia o container
+
+            stage ('Run Docker Container') {
+
+                agent any
+
+                steps {
+
+                    sh 'docker rm -f "${DOCKER_IMAGE_NAME}"'
+
+                    sh 'docker run -d -p 3000:3000 --name "${DOCKER_CONTAINER_NAME}" "${DOCKER_IMAGE_NAME}"'
+
+                }
+
+            }
+
         }
+
     }
-}
